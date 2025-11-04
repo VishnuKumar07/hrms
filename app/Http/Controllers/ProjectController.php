@@ -112,12 +112,12 @@ class ProjectController extends Controller
 
         $id = $request->id;
 
-        $viewproject = Project::where('id', $id)->first();
+        $editproject = Project::where('id', $id)->first();
 
-        if ($viewproject) {
+        if ($editproject) {
             return response()->json([
                 'status' => true,
-                'data' => $viewproject
+                'data' => $editproject
             ], 200);
         } else {
             return response()->json([

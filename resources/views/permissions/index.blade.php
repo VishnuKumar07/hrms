@@ -5,8 +5,9 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Permission List</h5>
                 @can('permission_create')
-                    <a href="#" class="btn btn-success btn-sm" id="addPermissionBtn"><i class="fa fa-plus"></i> Add
-                        Permission</a>
+                    <button class="btn btn-success btn-sm" id="addPermissionBtn">
+                        <i class="fa fa-plus"></i> Add Permission
+                    </button>
                 @endcan
             </div>
             <div class="card-body">
@@ -24,7 +25,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="modal fade" id="addPermissionModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -75,6 +76,18 @@
                     },
                     success: function(response) {
                         table.clear();
+
+                        if (response.data.length == 0) {
+                            $("#designationBody").html(`
+                                <tr>
+                                    <td colspan="3" class="py-3 text-center text-muted">
+                                        No data found
+                                    </td>
+                                </tr>
+                            `);
+                            return;
+                        }
+
                         $.each(response.data, function(index, permission) {
                             table.row.add([
                                 index + 1,

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
@@ -37,6 +38,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/view-project', [ProjectController::class, 'viewProject'])->name('view.project');
     Route::post('/edit-project', [ProjectController::class, 'editProject'])->name('edit.project');
     Route::delete('/delete-project', [ProjectController::class, 'deleteProject'])->name('delete.project');
+
+    Route::get('/designations', [DesignationController::class, 'index'])->name('designations');
+    Route::get('/get-designation', [DesignationController::class, 'getDesignation'])->name('get.designation');
+    Route::post('/create-designation', [DesignationController::class, 'createDesignation'])->name('create.designation');
+    Route::post('/view-designation', [DesignationController::class, 'viewDesignation'])->name('view.designation');
+    Route::post('/edit-designation', [DesignationController::class, 'editDesignation'])->name('edit.designation');
+    Route::delete('/delete-designation', [DesignationController::class, 'deleteDesignation'])->name('delete.designation');
 
 });
 

@@ -37,19 +37,17 @@
         <i class="bi bi-chevron-right arrow-icon"></i>
     </a>
 
-    <div class="collapse {{ Request::is('company*') || Request::is('projects*') || Request::is('designations*') ? 'show' : '' }}"
-        id="masterSubMenu">
-
+    <div class="collapse {{ Request::is('projects*') || Request::is('designations*') ? 'show' : '' }}" id="masterSubMenu">
+        @can('designation_access')
+            <a href="{{ route('designations') }}" class="menu-item ps-5 {{ Request::is('designations*') ? 'active' : '' }}">
+                <i class="bi bi-person-badge"></i> Designations
+            </a>
+        @endcan
         @can('project_access')
             <a href="{{ route('projects') }}" class="menu-item ps-5 {{ Request::is('projects*') ? 'active' : '' }}">
                 <i class="bi bi-kanban"></i> Projects
             </a>
         @endcan
-
-        <a href="#" class="menu-item ps-5 {{ Request::is('designations*') ? 'active' : '' }}">
-            <i class="bi bi-person-badge"></i> Designations
-        </a>
-
 
     </div>
 @endcan
