@@ -63,7 +63,9 @@
     <script>
         $(document).ready(function() {
 
-            let table = $('#worktypeTable').DataTable();
+            let table = $('#worktypeTable').DataTable({
+                "ordering": false,
+            });
             ajax();
 
             function ajax() {
@@ -95,9 +97,10 @@
                             return;
                         }
 
+                        let total = response.data.length;
                         $.each(response.data, function(index, worktype) {
                             table.row.add([
-                                index + 1,
+                                total - index,
                                 worktype.name,
                                 worktype.created_by,
                                 worktype.action

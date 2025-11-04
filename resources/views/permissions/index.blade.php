@@ -59,7 +59,9 @@
     <script>
         $(document).ready(function() {
 
-            let table = $('#permissionsTable').DataTable();
+            let table = $('#permissionsTable').DataTable({
+                "ordering": false,
+            });
             ajax();
 
             function ajax() {
@@ -90,9 +92,10 @@
                             return;
                         }
 
+                        let total = response.data.length;
                         $.each(response.data, function(index, permission) {
                             table.row.add([
-                                index + 1,
+                                total - index,
                                 permission.name,
                                 permission.action
                             ]).draw(false);

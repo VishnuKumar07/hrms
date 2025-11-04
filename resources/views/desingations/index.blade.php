@@ -58,7 +58,9 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            let table = $('#designationTable').DataTable();
+            let table = $('#designationTable').DataTable({
+                "ordering": false,
+            });
             ajax();
 
             function ajax() {
@@ -91,7 +93,6 @@
                         }
 
                         let total = response.data.length;
-
                         $.each(response.data, function(index, designation) {
                             table.row.add([
                                 total - index,
@@ -100,6 +101,7 @@
                                 designation.action
                             ]).draw(false);
                         });
+
 
                     }
                 });

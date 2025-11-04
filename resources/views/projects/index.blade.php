@@ -63,7 +63,9 @@
     <script>
         $(document).ready(function() {
 
-            let table = $('#projectTable').DataTable();
+            let table = $('#projectTable').DataTable({
+                "ordering": false,
+            });
             ajax();
 
             function ajax() {
@@ -94,10 +96,10 @@
                             `);
                             return;
                         }
-
+                        let total = response.data.length;
                         $.each(response.data, function(index, project) {
                             table.row.add([
-                                index + 1,
+                                total - index,
                                 project.name,
                                 project.created_by,
                                 project.action
