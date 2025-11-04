@@ -1,9 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-    <div id="fullPageLoader" style="display:none;">
-        <div class="center_loader"></div>
-    </div>
-
+    
     <div class="container mt-4">
         <div class="shadow-sm card">
             <div class="card-header d-flex justify-content-between align-items-center">

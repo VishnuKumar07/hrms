@@ -165,6 +165,9 @@
 </head>
 
 <body>
+    <div id="fullPageLoader" style="display:none;">
+        <div class="center_loader"></div>
+    </div>
 
     <div class="sidebar">
         <div class="sidebar-logo"></div>
