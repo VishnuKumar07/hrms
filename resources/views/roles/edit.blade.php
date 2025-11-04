@@ -45,19 +45,28 @@
                     <input type="text" name="name" value="{{ $role->name }}" class="form-control" required>
                 </div>
 
-                <label class="form-label fw-semibold">Assign Permissions</label>
+                <!-- ✅ Select All / Deselect All Buttons -->
+                <div class="mb-2 d-flex justify-content-between align-items-center">
+                    <label class="form-label fw-semibold">Assign Permissions</label>
+
+                    <div>
+                        <button type="button" id="selectAll" class="btn btn-success btn-sm">Select All</button>
+                        <button type="button" id="deselectAll" class="btn btn-danger btn-sm">Deselect All</button>
+                    </div>
+                </div>
 
                 <div class="row">
                     @foreach ($permissions as $permission)
                         <div class="col-md-3 col-sm-6">
                             <label class="permission-checkbox">
-                                <input type="checkbox" name="permission_id[]" value="{{ $permission->id }}"
-                                    @checked(in_array($permission->id, $rolePermissions))>
+                                <input type="checkbox" class="permissionBox" name="permission_id[]"
+                                    value="{{ $permission->id }}" @checked(in_array($permission->id, $rolePermissions))>
                                 {{ ucwords(str_replace('_', ' ', $permission->name)) }}
                             </label>
                         </div>
                     @endforeach
                 </div>
+
                 <div class="text-center">
                     <button class="mt-4 btn btn-primary">
                         <i class="bi bi-save"></i> Update Role
@@ -66,4 +75,15 @@
             </form>
         </div>
     </div>
+@endsection
+@section('scripts')
+    <script>
+        $("#selectAll").on("click", function() {
+            $(".permissionBox").prop("checked", true);
+        });
+
+        $("#deselectAll").on("click", function() {
+            $(".permissionBox").prop("checked", false);
+        });
+    </script>
 @endsection

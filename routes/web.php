@@ -6,6 +6,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\WorktypeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -45,6 +46,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/view-designation', [DesignationController::class, 'viewDesignation'])->name('view.designation');
     Route::post('/edit-designation', [DesignationController::class, 'editDesignation'])->name('edit.designation');
     Route::delete('/delete-designation', [DesignationController::class, 'deleteDesignation'])->name('delete.designation');
+
+    Route::get('/worktypes', [WorktypeController::class, 'index'])->name('worktypes');
+    Route::get('/get-worktype', [WorktypeController::class, 'getWorktype'])->name('get.worktype');
+    Route::post('/create-worktype', [WorktypeController::class, 'createWorktype'])->name('create.worktype');
+    Route::post('/view-worktype', [WorktypeController::class, 'viewWorktype'])->name('view.worktype');
+    Route::post('/edit-worktype', [WorktypeController::class, 'editWorktype'])->name('edit.worktype');
+    Route::delete('/delete-worktype', [WorktypeController::class, 'deleteWorktype'])->name('delete.worktype');
 
 });
 

@@ -32,12 +32,13 @@
 @can('master_tool_access')
     <a class="menu-item d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#masterSubMenu"
         role="button"
-        aria-expanded="{{ Request::is('company*') || Request::is('projects*') || Request::is('designations*') ? 'true' : 'false' }}">
+        aria-expanded="{{ Request::is('company*') || Request::is('projects*') || Request::is('designations*') || Request::is('worktypes*') ? 'true' : 'false' }}">
         <span><i class="bi bi-tools"></i> Master Tool</span>
         <i class="bi bi-chevron-right arrow-icon"></i>
     </a>
 
-    <div class="collapse {{ Request::is('projects*') || Request::is('designations*') ? 'show' : '' }}" id="masterSubMenu">
+    <div class="collapse {{ Request::is('projects*') || Request::is('designations*') || Request::is('worktypes*') ? 'show' : '' }}"
+        id="masterSubMenu">
         @can('designation_access')
             <a href="{{ route('designations') }}" class="menu-item ps-5 {{ Request::is('designations*') ? 'active' : '' }}">
                 <i class="bi bi-person-badge"></i> Designations
@@ -46,6 +47,11 @@
         @can('project_access')
             <a href="{{ route('projects') }}" class="menu-item ps-5 {{ Request::is('projects*') ? 'active' : '' }}">
                 <i class="bi bi-kanban"></i> Projects
+            </a>
+        @endcan
+        @can('worktype_access')
+            <a href="{{ route('worktypes') }}" class="menu-item ps-5 {{ Request::is('worktypes*') ? 'active' : '' }}">
+                <i class="bi bi-clipboard-check"></i> Work Type
             </a>
         @endcan
 

@@ -44,8 +44,10 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="closePermissionBtn" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Close</button>
                     <button type="button" id="savePermissionBtn" class="btn btn-primary">Save</button>
+                    <div class="model_loader" style="display: none"></div>
                 </div>
 
             </div>
@@ -102,8 +104,12 @@
             $("#addPermissionBtn").click(function() {
                 $("#permissionName").val("");
                 $("#permissionId").val("")
+                $("#permissionName_error").text("");
                 $("#savePermissionBtn").text("Save");
                 $("#addPermissionModal").modal("show");
+                $(".model_loader").hide();
+                $("#savePermissionBtn").show();
+                $("#closePermissionBtn").show();
             });
 
             $("#savePermissionBtn").click(function() {
@@ -119,6 +125,10 @@
                     $("#permissionName_error").text("");
                 }
 
+                $(".model_loader").show();
+                $("#savePermissionBtn").hide();
+                $("#closePermissionBtn").hide();
+
                 $.ajax({
                     url: "{{ route('create.permission') }}",
                     type: "post",
@@ -132,15 +142,21 @@
                     success: function(response) {
                         $("#permissionName").val("");
                         $("#addPermissionModal").modal("hide");
+                        $(".model_loader").hide();
+                        $("#savePermissionBtn").show();
+                        $("#closePermissionBtn").show();
                         Swal.fire({
                             title: "Success!",
-                            text: "Permission saved successfully.",
+                            text: response.message || "Permission saved successfully.",
                             icon: "success",
                             confirmButtonText: "OK"
                         });
                         ajax()
                     },
                     error: function(xhr, status, error) {
+                        $(".model_loader").hide();
+                        $("#savePermissionBtn").show();
+                        $("#closePermissionBtn").show();
                         Swal.fire({
                             title: "Error!",
                             text: "Unable to add permission",

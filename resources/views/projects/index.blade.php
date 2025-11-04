@@ -85,7 +85,7 @@
                         table.clear();
 
                         if (response.data.length == 0) {
-                            $("#designationBody").html(`
+                            $("#projectBody").html(`
                                 <tr>
                                     <td colspan="4" class="py-3 text-center text-muted">
                                         No data found
@@ -110,6 +110,7 @@
             $("#addproject_btn").click(function() {
                 $("#project_name").val("");
                 $("#project_id").val("")
+                $("#projectname_error").text("");
                 $("#saveprojectBtn").text("Save");
                 $("#addprojectModal").modal("show");
                 $(".model_loader").hide();
@@ -150,7 +151,7 @@
                         $("#addprojectModal").modal("hide");
                         Swal.fire({
                             title: "Success!",
-                            text: "project saved successfully.",
+                            text: response.message || "Project saved successfully.",
                             icon: "success",
                             confirmButtonText: "OK"
                         });

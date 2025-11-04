@@ -61,7 +61,7 @@ class DesignationController extends Controller
             ]);
             return response()->json([
                 'status'  => true,
-                'message' => 'designation updated successfully.'
+                'message' => 'Designation updated successfully.'
             ]);
         } else {
             Designation::create([
