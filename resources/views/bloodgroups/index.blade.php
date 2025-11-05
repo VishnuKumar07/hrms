@@ -231,7 +231,7 @@
                     success: function(response) {
                         $("#fullPageLoader").hide();
                         $("#addbloodgroupModal").modal("show");
-                        $("#bloodgroup_name").val(response.data.name);
+                        $("#bloodgroup_name").val(response.data.bloodgroup);
                         $("#bloodgroup_id").val(response.data.id);
                         $("#savebloodgroupBtn").show()
                         $("#savebloodgroupBtn").text("Update");

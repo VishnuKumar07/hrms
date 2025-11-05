@@ -6,19 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class State extends Model
+class Country extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'countries';
+
     protected $fillable = [
-        'state',
-        'created_by',
-        'country_id'
+        'country',
+        'created_by'
     ];
-
-    public function country()
-    {
-        return $this->belongsTo(Country::class, 'country_id');
-    }
-
 }

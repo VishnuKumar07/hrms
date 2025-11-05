@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BloodgroupController;
+use App\Http\Controllers\CountryController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PermissionController;
@@ -69,6 +70,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/view-bloodgroup', [BloodgroupController::class, 'viewBloodgroup'])->name('view.bloodgroup');
     Route::post('/edit-bloodgroup', [BloodgroupController::class, 'editBloodgroup'])->name('edit.bloodgroup');
     Route::delete('/delete-bloodgroup', [BloodgroupController::class, 'deleteBloodgroup'])->name('delete.bloodgroup');
+
+    Route::get('/countries', [CountryController::class, 'index'])->name('countries');
+    Route::get('/get-country', [CountryController::class, 'getCountry'])->name('get.country');
+    Route::post('/create-country', [CountryController::class, 'createCountry'])->name('create.country');
+    Route::post('/view-country', [CountryController::class, 'viewCountry'])->name('view.country');
+    Route::post('/edit-country', [CountryController::class, 'editCountry'])->name('edit.country');
+    Route::delete('/delete-country', [CountryController::class, 'deleteCountry'])->name('delete.country');
 
 });
 

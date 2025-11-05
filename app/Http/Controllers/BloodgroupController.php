@@ -57,7 +57,7 @@ class BloodgroupController extends Controller
 
             $bloodgroup = Bloodgroup::findOrFail($request->id);
             $bloodgroup->update([
-                'name'        => $request->bloodgroup_name,
+                'bloodgroup'        => $request->bloodgroup_name,
                 'created_by'  => Auth::user()->name,
             ]);
 
@@ -68,7 +68,7 @@ class BloodgroupController extends Controller
         } else {
 
             Bloodgroup::create([
-                'name'        => $request->bloodgroup_name,
+                'bloodgroup'        => $request->bloodgroup_name,
                 'created_by'  => Auth::user()->name,
             ]);
 
@@ -96,7 +96,7 @@ class BloodgroupController extends Controller
         return response()->json([
             'data' => [
                 'id'   => $bloodgroup->id,
-                'name' => $bloodgroup->name,
+                'name' => $bloodgroup->bloodgroup,
             ]
         ]);
     }

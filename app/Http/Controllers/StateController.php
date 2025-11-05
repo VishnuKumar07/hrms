@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use App\Models\State;
+use App\Models\Country;
 
 class StateController extends Controller
 {
@@ -15,7 +16,8 @@ class StateController extends Controller
         if (! Gate::allows('state_access')) {
             abort(403);
         }
-       return view('states.index');
+        $countries = Country::all();
+       return view('states.index', compact('countries'));
     }
 
     public function getState()
@@ -24,11 +26,12 @@ class StateController extends Controller
             abort(403);
         }
 
-        $states = State::orderBy('id', 'DESC')->get();
+        $states = State::with('country')->orderBy('id', 'DESC')->get();
         $data = $states->map(function ($state) {
             return [
                 'id'     => $state->id,
                 'name'   => $state->state,
+                'country'     => $state->country->country ?? 'N/A',
                 'created_by' => $state->created_by,
                 'action' => view('components.action-buttons', [
                     'id'          => $state->id,
@@ -50,6 +53,7 @@ class StateController extends Controller
 
         $request->validate([
             'state_name' => 'required|string|max:255',
+            'country_id' => 'required',
         ]);
 
         if ($request->id) {
@@ -58,6 +62,7 @@ class StateController extends Controller
             $state->update([
                 'state'        => $request->state_name,
                 'created_by'  => Auth::user()->name,
+                'country_id' => $request->country_id,
             ]);
 
             return response()->json([
@@ -69,6 +74,7 @@ class StateController extends Controller
             State::create([
                 'state'        => $request->state_name,
                 'created_by'  => Auth::user()->name,
+                'country_id' => $request->country_id,
             ]);
 
             return response()->json([
@@ -96,6 +102,7 @@ class StateController extends Controller
             'data' => [
                 'id'   => $state->id,
                 'name' => $state->state,
+                'country_id' => $state->country_id,
             ]
         ]);
     }
