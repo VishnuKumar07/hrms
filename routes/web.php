@@ -6,6 +6,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\StateController;
 use App\Http\Controllers\WorktypeController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,6 +54,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/view-worktype', [WorktypeController::class, 'viewWorktype'])->name('view.worktype');
     Route::post('/edit-worktype', [WorktypeController::class, 'editWorktype'])->name('edit.worktype');
     Route::delete('/delete-worktype', [WorktypeController::class, 'deleteWorktype'])->name('delete.worktype');
+
+    Route::get('/states', [StateController::class, 'index'])->name('states');
+    Route::get('/get-state', [StateController::class, 'getState'])->name('get.state');
+    Route::post('/create-state', [StateController::class, 'createState'])->name('create.state');
+    Route::post('/view-state', [StateController::class, 'viewState'])->name('view.state');
+    Route::post('/edit-state', [StateController::class, 'editState'])->name('edit.state');
+    Route::delete('/delete-state', [StateController::class, 'deleteState'])->name('delete.state');
 
 });
 

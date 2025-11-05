@@ -29,7 +29,12 @@ class PermissionController extends Controller
             return [
                 'id'     => $permission->id,
                 'name'   => $permission->name,
-                'action' => view('components.action-buttons', ['id' => $permission->id])->render()
+               'action' => view('components.action-buttons', [
+                    'id'          => $permission->id,
+                    'viewRoute'   => 'permission_view',
+                    'editRoute'   => 'permission_edit',
+                    'deleteRoute' => 'permission_delete',
+                ])->render()
             ];
         });
 
