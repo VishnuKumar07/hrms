@@ -11,6 +11,9 @@ class WorktypeController extends Controller
 {
     public function index(Request $request)
     {
+        if (! Gate::allows('worktype_access')) {
+            abort(403);
+        }
         return view('worktypes.index');
     }
 
