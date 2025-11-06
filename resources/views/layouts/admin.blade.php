@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -29,7 +30,7 @@
         }
 
         .sidebar {
-            width: 240px;
+            width: 250px;
             height: 100vh;
             background: linear-gradient(180deg, #004433, #006644);
             color: white;
@@ -79,7 +80,7 @@
         }
 
         .navbar-custom {
-            margin-left: 240px;
+            margin-left: 250px;
         }
 
         .menu-item[aria-expanded="true"] .arrow-icon {
@@ -169,6 +170,55 @@
                 clip-path: inset(0 -34% 0 0)
             }
         }
+
+        /* Bootstrap 5 compatible Select2 styles */
+        .select2-container .select2-selection--single {
+            height: calc(2rem + 2px) !important;
+            padding: 0.375rem 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+            right: 10px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: normal;
+            color: #212529;
+        }
+
+        .select2-container--default .select2-selection--single:focus,
+        .select2-container--default .select2-selection--multiple:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, .25);
+            outline: 0;
+        }
+
+        .select2-dropdown {
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .select2-container {
+            z-index: 9999 !important;
+        }
+
+        .select2-dropdown {
+            z-index: 99999 !important;
+        }
+
+        .swal2-container {
+            z-index: 110000 !important;
+        }
     </style>
 </head>
 
@@ -224,30 +274,43 @@
             <div class="modal-content">
                 <form id="changePasswordForm">
                     @csrf
-                    <div class="text-white modal-header bg-primary">
+                    <div class="text-white modal-header bg-success">
                         <h5 class="modal-title" id="changePasswordLabel">Change Password</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="new_password" class="form-label">New Password&nbsp;<span
-                                    class="text-danger">*</span></label>
-                            <input type="password" class="form-control" id="new_password" name="new_password" required>
+                        <div class="mb-3 position-relative">
+                            <label for="new_password" class="form-label">
+                                New Password <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="new_password" name="new_password"
+                                    required>
+                                <span class="input-group-text" id="toggleNewPassword" style="cursor: pointer;">
+                                    <i class="fa fa-eye"></i>
+                                </span>
+                            </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="confirm_password" class="form-label">Confirm New Password&nbsp;<span
-                                    class="text-danger">*</span></label>
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password"
-                                required>
+                        <div class="mb-3 position-relative">
+                            <label for="confirm_password" class="form-label">
+                                Confirm New Password <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="confirm_password"
+                                    name="confirm_password" required>
+                                <span class="input-group-text" id="toggleConfirmPassword" style="cursor: pointer;">
+                                    <i class="fa fa-eye"></i>
+                                </span>
+                            </div>
                         </div>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update Password</button>
+                        <button type="submit" class="btn btn-success">Update Password</button>
                     </div>
                 </form>
             </div>
@@ -263,6 +326,31 @@
 
     <script>
         $(document).ready(function() {
+            $('.select2').each(function() {
+                let $this = $(this);
+                $this.select2({
+                    placeholder: $this.data('placeholder') || 'Select an option',
+                    width: '100%',
+                    dropdownParent: $this.closest('.modal').length ? $this.closest('.modal') : $(
+                        document.body)
+                });
+            });
+            $("#toggleNewPassword").click(function() {
+                let input = $("#new_password");
+                let icon = $(this).find("i");
+                let type = input.attr("type") == "password" ? "text" : "password";
+                input.attr("type", type);
+                icon.toggleClass("fa-eye fa-eye-slash");
+            });
+
+            $("#toggleConfirmPassword").click(function() {
+                let input = $("#confirm_password");
+                let icon = $(this).find("i");
+                let type = input.attr("type") == "password" ? "text" : "password";
+                input.attr("type", type);
+                icon.toggleClass("fa-eye fa-eye-slash");
+            });
+
             $('#changePasswordForm').on('submit', function(e) {
                 e.preventDefault();
 
@@ -304,8 +392,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Error updating password',
-                            text: xhr.responseJSON?.message ||
-                                'Please try again later.',
+                            text: 'Please try again.',
                             confirmButtonColor: '#0d6efd'
                         });
                     },

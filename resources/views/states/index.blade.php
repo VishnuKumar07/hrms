@@ -73,11 +73,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $('#country_id').select2({
-                dropdownParent: $('#addstateModal'),
-                placeholder: 'Select Country',
-                width: '100%'
-            });
+  
             let table = $('#stateTable').DataTable({
                 "ordering": false,
             });

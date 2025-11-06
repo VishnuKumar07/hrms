@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Designation;
+use App\Models\PersonalDetails;
+use App\Models\Worktype;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +30,9 @@ class UserController extends Controller
         }
 
         $roles = Role::all();
-        return view('users.create', compact('roles'));
+        $designations = Designation::all();
+        $worktypes = Worktype::all();
+        return view('users.create', compact('roles','designations','worktypes'));
     }
 
     public function store(Request $request)
@@ -36,11 +41,16 @@ class UserController extends Controller
             abort(403);
         }
 
-        $request->validate([
+         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
+            'password' => 'required|min:8',
             'role_id' => 'required',
+            'designation_id' => 'required_if:role_id,3',
+            'employee_id' => 'required_if:role_id,3',
+            'gender' => 'required_if:role_id,3',
+            'mobile_number' => 'required_if:role_id,3|digits:10',
+            'worktype_id' => 'required_if:role_id,3',
         ]);
 
         $user = User::create([
@@ -50,7 +60,25 @@ class UserController extends Controller
         ]);
 
         $user->roles()->sync($request->role_id);
-        return redirect()->route('users.index')->with('success', 'User created successfully');
+        if ($request->role_id == 3) {
+            PersonalDetails::create([
+                'user_id' => $user->id,
+                'role_id' => $request->role_id,
+                'designation_id' => $request->designation_id,
+                'name' => $request->name,
+                'email' => $request->email,
+                'employee_id' => $request->employee_id,
+                'gender' => $request->gender,
+                'mobile_number' => $request->mobile_number,
+                'worktype_id' => $request->worktype_id,
+                'employee_status' => 'Active'
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'User created successfully',
+        ]);
     }
 
     public function edit(User $user)

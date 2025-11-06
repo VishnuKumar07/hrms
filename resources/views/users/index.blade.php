@@ -15,10 +15,10 @@
         @endif
 
         @can('user_create')
-            <a href="{{ route('users.create') }}" class="mb-3 btn btn-primary">Add User</a>
+            <a href="{{ route('users.create') }}" class="mb-3 btn btn-success">Add User</a>
         @endcan
 
-        <table class="table table-bordered text-center">
+        <table class="table text-center table-bordered">
             <thead>
                 <tr>
                     <th>S.No</th>
