@@ -96,6 +96,14 @@
             text-align: center !important;
         }
 
+        .dropdown-menu li {
+            margin-bottom: 8px;
+        }
+
+        .dropdown-menu li:last-child {
+            margin-bottom: 0;
+        }
+
         #fullPageLoader {
             position: fixed;
             top: 0;
@@ -185,16 +193,16 @@
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="bi bi-shield-lock"></i> Change Password
-                            </a>
-                        </li>
-
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
+                        @can('change_password_access')
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#changePasswordModal">
+                                        <i class="bi bi-shield-lock"></i> Change Password
+                                    </a>
+                                </a>
+                            </li>
+                        @endcan
                         <li>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -209,11 +217,108 @@
         </div>
     </nav>
 
+
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="changePasswordForm">
+                    @csrf
+                    <div class="text-white modal-header bg-primary">
+                        <h5 class="modal-title" id="changePasswordLabel">Change Password</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="new_password" class="form-label">New Password&nbsp;<span
+                                    class="text-danger">*</span></label>
+                            <input type="password" class="form-control" id="new_password" name="new_password" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="confirm_password" class="form-label">Confirm New Password&nbsp;<span
+                                    class="text-danger">*</span></label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
     <main class="content">
         @yield('content')
     </main>
 
     @yield('scripts')
+
+    <script>
+        $(document).ready(function() {
+            $('#changePasswordForm').on('submit', function(e) {
+                e.preventDefault();
+
+                let new_password = $('#new_password').val();
+                let confirm_password = $('#confirm_password').val();
+
+                if (new_password !== confirm_password) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Passwords do not match!',
+                        confirmButtonColor: '#0d6efd'
+                    });
+                    return;
+                }
+
+                $.ajax({
+                    url: "{{ route('user.changepassword') }}",
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        new_password: new_password
+                    },
+                    beforeSend: function() {
+                        $('#changePasswordForm button[type="submit"]').prop('disabled', true)
+                            .text('Updating...');
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Password updated successfully!',
+                            confirmButtonColor: '#0d6efd'
+                        });
+                        $('#changePasswordModal').modal('hide');
+                        $('#changePasswordForm')[0].reset();
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error updating password',
+                            text: xhr.responseJSON?.message ||
+                                'Please try again later.',
+                            confirmButtonColor: '#0d6efd'
+                        });
+                    },
+                    complete: function() {
+                        $('#changePasswordForm button[type="submit"]').prop('disabled', false)
+                            .text('Update Password');
+                    }
+                });
+            });
+        });
+    </script>
+
+
 
 </body>
 

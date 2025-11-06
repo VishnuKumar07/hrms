@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BloodgroupController;
+use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\ProfileController;
@@ -24,6 +25,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
+
+    Route::post('/user-changepassword', [ChangePasswordController::class, 'changepassword'])->name('user.changepassword');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

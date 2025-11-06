@@ -32,7 +32,7 @@
 @can('master_tool_access')
     <a class="menu-item d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#masterSubMenu"
         role="button"
-        aria-expanded="{{ Request::is('projects*') || Request::is('designations*') ||  Request::is('countries*') || Request::is('worktypes*') || Request::is('states*') || Request::is('bloodgroups*') ? 'true' : 'false' }}">
+        aria-expanded="{{ Request::is('projects*') || Request::is('designations*') || Request::is('countries*') || Request::is('worktypes*') || Request::is('states*') || Request::is('bloodgroups*') ? 'true' : 'false' }}">
         <span><i class="bi bi-tools"></i> Master Tool</span>
         <i class="bi bi-chevron-right arrow-icon"></i>
     </a>
