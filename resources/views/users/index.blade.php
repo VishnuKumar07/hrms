@@ -42,14 +42,15 @@
                         </td>
                         <td>
                             @can('user_edit')
-                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{{ route('users.edit', encrypt($user->id)) }}" class="btn btn-sm btn-primary">Edit</a>
                             @endcan
 
                             @can('user_delete')
-                                <form action="{{ route('users.destroy', $user->id) }}" method="POST"
-                                    style="display:inline-block;">
-                                    @csrf @method('DELETE')
-                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                <form action="{{ route('users.destroy', encrypt($user->id)) }}" method="POST"
+                                    class="d-inline delete-form">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
                                 </form>
                             @endcan
                         </td>
@@ -58,4 +59,32 @@
             </tbody>
         </table>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+
+            $(".delete-btn").click(function(e) {
+                e.preventDefault();
+
+                let form = $(this).closest("form");
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Do you really want to delete this user?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "Cancel"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

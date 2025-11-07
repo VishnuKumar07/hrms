@@ -66,7 +66,7 @@
             function ajax() {
                 $("#designationBody").html(`
                     <tr id="loadingRow">
-                        <td colspan="4" class="py-4 text-center">
+                        <td colspan="4" class="py-3 text-center">
                             <div class="loader"></div>
                         </td>
                     </tr>

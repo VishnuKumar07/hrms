@@ -12,7 +12,7 @@ class ChangePasswordController extends Controller
 {
     public function changePassword(Request $request)
     {
-        if (! Gate::allows('change_password_access')) {
+        if (! Gate::allows('user_change_password_access')) {
             abort(403);
         }
 

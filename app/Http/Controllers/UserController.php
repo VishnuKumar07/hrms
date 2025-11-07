@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Designation;
 use App\Models\PersonalDetails;
+Use App\Models\EmployeeList;
 use App\Models\Worktype;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -60,16 +61,24 @@ class UserController extends Controller
         ]);
 
         $user->roles()->sync($request->role_id);
+
         if ($request->role_id == 3) {
+
             PersonalDetails::create([
                 'user_id' => $user->id,
                 'role_id' => $request->role_id,
                 'designation_id' => $request->designation_id,
                 'name' => $request->name,
                 'email' => $request->email,
-                'employee_id' => $request->employee_id,
                 'gender' => $request->gender,
                 'mobile_number' => $request->mobile_number,
+            ]);
+
+            EmployeeList::create([
+                'user_id' => $user->id,
+                'role_id' => $request->role_id,
+                'employee_id' => $request->employee_id,
+                'designation_id' => $request->designation_id,
                 'worktype_id' => $request->worktype_id,
                 'employee_status' => 'Active'
             ]);
@@ -89,8 +98,11 @@ class UserController extends Controller
 
         $roles = Role::all();
         $userRoles = $user->roles->pluck('id')->toArray();
-
-        return view('users.edit', compact('user', 'roles', 'userRoles'));
+        $personalDetails = PersonalDetails::where('user_id', $user->id)->first();
+        $employeeDetails = EmployeeList::where('user_id', $user->id)->first();
+        $designations = Designation::all();
+        $worktypes = Worktype::all();
+        return view('users.edit', compact('user', 'roles', 'userRoles','personalDetails','employeeDetails','designations','worktypes'));
     }
 
     public function update(Request $request, User $user)
@@ -112,6 +124,24 @@ class UserController extends Controller
             $user->update([ 'password' => Hash::make($request->password) ]);
         }
 
+        if ($request->role_id == 3) {
+            PersonalDetails::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'mobile_number' => $request->mobile_number,
+                    'gender' => $request->gender,
+                ]
+            );
+            EmployeeList::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'employee_id' => $request->employee_id,
+                    'designation_id' => $request->designation_id,
+                    'worktype_id' => $request->worktype_id,
+                ]
+            );
+        }
+
         $user->roles()->sync($request->role_id);
 
         return redirect()->route('users.index')->with('success', 'User updated successfully');
@@ -123,9 +153,17 @@ class UserController extends Controller
             abort(403);
         }
 
+        $roleId = $user->roles()->pluck('roles.id')->first();
+
+        if ($roleId == 3) {
+            PersonalDetails::where('user_id', $user->id)->delete();
+            EmployeeList::where('user_id', $user->id)->delete();
+        }
+
         $user->roles()->detach();
         $user->delete();
 
         return redirect()->route('users.index')->with('success', 'User deleted successfully');
     }
+
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\BloodgroupController;
 use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
@@ -12,6 +13,17 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\WorktypeController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Crypt;
+use App\Models\User;
+
+Route::bind('user', function ($value) {
+    try {
+        $id = decrypt($value);
+        return User::findOrFail($id);
+    } catch (\Exception $e) {
+        abort(404, 'Invalid User ID');
+    }
+});
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -80,6 +92,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/view-country', [CountryController::class, 'viewCountry'])->name('view.country');
     Route::post('/edit-country', [CountryController::class, 'editCountry'])->name('edit.country');
     Route::delete('/delete-country', [CountryController::class, 'deleteCountry'])->name('delete.country');
+
+    Route::get('/districts', [DistrictController::class, 'index'])->name('districts');
+    Route::get('/get-district', [DistrictController::class, 'getDistrict'])->name('get.district');
+    Route::post('/create-district', [DistrictController::class, 'createDistrict'])->name('create.district');
+    Route::post('/view-district', [DistrictController::class, 'viewDistrict'])->name('view.district');
+    Route::post('/edit-district', [DistrictController::class, 'editDistrict'])->name('edit.district');
+    Route::delete('/delete-district', [DistrictController::class, 'deleteDistrict'])->name('delete.district');
+    Route::get('/get-states-by-country', [DistrictController::class, 'getStatesByCountry'])->name('get.states.by.country');
+
 
 });
 

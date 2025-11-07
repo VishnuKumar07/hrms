@@ -15,7 +15,7 @@
         @endif
 
         @can('role_create')
-            <a href="{{ route('roles.create') }}" class="mb-3 btn btn-primary">Add Role</a>
+            <a href="{{ route('roles.create') }}" class="mb-3 btn btn-success">Add Role</a>
         @endcan
 
 

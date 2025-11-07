@@ -45,8 +45,7 @@
             <i class="bi bi-person-lines-fill"></i> Employees
         </a>
 
-        <a href="#"
-            class="menu-item ps-5 {{ Request::is('inactive-employees*') ? 'active' : '' }}">
+        <a href="#" class="menu-item ps-5 {{ Request::is('inactive-employees*') ? 'active' : '' }}">
             <i class="bi bi-person-x-fill"></i> Inactive Employee
         </a>
 
@@ -58,7 +57,7 @@
 @can('master_tool_access')
     <a class="menu-item d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#masterSubMenu"
         role="button"
-        aria-expanded="{{ Request::is('projects*') || Request::is('designations*') || Request::is('countries*') || Request::is('worktypes*') || Request::is('states*') || Request::is('bloodgroups*') ? 'true' : 'false' }}">
+        aria-expanded="{{ Request::is('projects*') || Request::is('districts*') || Request::is('designations*') || Request::is('countries*') || Request::is('worktypes*') || Request::is('states*') || Request::is('bloodgroups*') ? 'true' : 'false' }}">
         <span><i class="bi bi-tools"></i> Master Tool</span>
         <i class="bi bi-chevron-right arrow-icon"></i>
     </a>
@@ -68,6 +67,7 @@
     Request::is('worktypes*') ||
     Request::is('states*') ||
     Request::is('countries*') ||
+    Request::is('districts*') ||
     Request::is('bloodgroups*')
         ? 'show'
         : '' }}"
@@ -82,10 +82,14 @@
                 <i class="bi bi-globe-americas"></i> Countries
             </a>
         @endcan
-
         @can('designation_access')
             <a href="{{ route('designations') }}" class="menu-item ps-5 {{ Request::is('designations*') ? 'active' : '' }}">
                 <i class="bi bi-person-badge"></i> Designations
+            </a>
+        @endcan
+        @can('district_access')
+            <a href="{{ route('districts') }}" class="menu-item ps-5 {{ Request::is('districts*') ? 'active' : '' }}">
+                <i class="bi bi-geo"></i> District
             </a>
         @endcan
         @can('project_access')
@@ -95,7 +99,7 @@
         @endcan
         @can('state_access')
             <a href="{{ route('states') }}" class="menu-item ps-5 {{ Request::is('states*') ? 'active' : '' }}">
-                <i class="bi bi-geo-alt"></i> State
+                <i class="bi bi-map"></i> State
             </a>
         @endcan
         @can('worktype_access')

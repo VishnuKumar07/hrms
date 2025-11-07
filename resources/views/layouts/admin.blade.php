@@ -243,7 +243,7 @@
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        @can('change_password_access')
+                        @can('user_change_password_access')
                             <li>
                                 <a class="dropdown-item" href="#">
                                     <a class="dropdown-item" href="#" data-bs-toggle="modal"
@@ -389,10 +389,24 @@
                         $('#changePasswordForm')[0].reset();
                     },
                     error: function(xhr) {
+                        let errorMessage = 'Please try again.';
+                        let title = 'Error updating password';
+                        let iconType = 'error';
+
+                        if (xhr.status == 422) {
+                            let errors = xhr.responseJSON.errors;
+                            if (errors && errors.new_password) {
+                                errorMessage = errors.new_password[0];
+                            }
+                        } else if (xhr.status == 403) {
+                            title = 'Access Denied';
+                            errorMessage = 'You do not have permission to change the password.';
+                            iconType = 'warning';
+                        }
                         Swal.fire({
-                            icon: 'error',
-                            title: 'Error updating password',
-                            text: 'Please try again.',
+                            icon: iconType,
+                            title: title,
+                            text: errorMessage,
                             confirmButtonColor: '#0d6efd'
                         });
                     },

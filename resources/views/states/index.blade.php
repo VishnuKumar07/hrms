@@ -49,7 +49,10 @@
                         </label>
                         <select id="country_id" class="form-select select2">
                             <option value="">Select Country</option>
-                            @foreach ($countries as $country)
+                            @foreach ($countries->where('country', 'India') as $country)
+                                <option value="{{ $country->id }}">{{ $country->country }}</option>
+                            @endforeach
+                            @foreach ($countries->where('country', '!=', 'India') as $country)
                                 <option value="{{ $country->id }}">{{ $country->country }}</option>
                             @endforeach
                         </select>
@@ -73,7 +76,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-  
+
             let table = $('#stateTable').DataTable({
                 "ordering": false,
             });
