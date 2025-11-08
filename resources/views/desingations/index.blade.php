@@ -59,7 +59,14 @@
     <script>
         $(document).ready(function() {
             let table = $('#designationTable').DataTable({
-                "ordering": false,
+                ordering: true,
+                order: [
+                    [0, 'desc']
+                ],
+                columnDefs: [{
+                    orderable: false,
+                    targets: [3]
+                }]
             });
             ajax();
 

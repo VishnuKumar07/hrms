@@ -60,7 +60,14 @@
         $(document).ready(function() {
 
             let table = $('#permissionsTable').DataTable({
-                "ordering": false,
+                ordering: true,
+                order: [
+                    [0, 'desc']
+                ],
+                columnDefs: [{
+                    orderable: false,
+                    targets: [2]
+                }]
             });
             ajax();
 

@@ -78,7 +78,14 @@
         $(document).ready(function() {
 
             let table = $('#stateTable').DataTable({
-                "ordering": false,
+                ordering: true,
+                order: [
+                    [0, 'desc']
+                ],
+                columnDefs: [{
+                    orderable: false,
+                    targets: [4]
+                }]
             });
             ajax();
 

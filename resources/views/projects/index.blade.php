@@ -64,7 +64,14 @@
         $(document).ready(function() {
 
             let table = $('#projectTable').DataTable({
-                "ordering": false,
+                ordering: true,
+                order: [
+                    [0, 'desc']
+                ],
+                columnDefs: [{
+                    orderable: false,
+                    targets: [3]
+                }]
             });
             ajax();
 

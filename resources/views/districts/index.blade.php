@@ -90,8 +90,16 @@
     <script>
         $(document).ready(function() {
             let table = $('#districtTable').DataTable({
-                "ordering": false,
+                ordering: true,
+                order: [
+                    [0, 'desc']
+                ],
+                columnDefs: [{
+                    orderable: false,
+                    targets: [5]
+                }]
             });
+
             ajax();
 
             function ajax() {
@@ -142,6 +150,8 @@
                 $("#district_id").val("")
                 $("#districtname_error").text("");
                 $("#country_id").val(null).trigger('change');
+                $("#state_id").val(null).trigger('change');
+                $(".state_div").hide()
                 $("#savedistrictBtn").text("Save");
                 $("#adddistrictModal").modal("show");
                 $(".model_loader").hide();
@@ -150,6 +160,7 @@
             });
 
             $('#country_id').on('change', function() {
+
                 let countryId = $(this).val();
                 if (countryId) {
                     $.ajax({
@@ -181,6 +192,238 @@
                         }
                     });
                 }
+            });
+
+            $("#savedistrictBtn").click(function() {
+
+                let district_name = $("#district_name").val();
+                let id = $("#district_id").val();
+                let state_id = $("#state_id").val();
+                let country_id = $("#country_id").val();
+
+
+                if (country_id == '') {
+                    $("#country_error").text("This filed is required");
+                    $("#country_id").focus();
+                    return false;
+                } else {
+                    $("#country_error").text("");
+                }
+
+                if ($("#state_id option").length > 1) {
+                    if (state_id == '') {
+                        $("#state_error").text("This field is required");
+                        $("#state_id").focus();
+                        return false;
+                    } else {
+                        $("#state_error").text("");
+                    }
+                } else {
+                    $("#state_error").text("");
+                }
+
+                if (district_name == '') {
+                    $("#districtname_error").text("This filed is required");
+                    $("#district_name").focus()
+                    return false;
+                } else {
+                    $("#districtname_error").text("");
+                }
+
+                $(".model_loader").show();
+                $("#closedistrictBtn").hide();
+                $("#savedistrictBtn").hide();
+
+
+                $.ajax({
+                    url: "{{ route('create.district') }}",
+                    type: "post",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        'id': id,
+                        'district_name': district_name,
+                        'country_id': country_id,
+                        'state_id': state_id
+                    },
+                    success: function(response) {
+                        $("#district_name").val("");
+                        $("#adddistrictModal").modal("hide");
+                        Swal.fire({
+                            title: "Success!",
+                            text: response.message || "district saved successfully.",
+                            icon: "success",
+                            confirmButtonText: "OK"
+                        });
+                        $(".model_loader").hide();
+                        $("#closedistrictBtn").show();
+                        $("#savedistrictBtn").show();
+                        ajax()
+                    },
+                    error: function(xhr, status, error) {
+                        $(".model_loader").hide();
+                        $("#closedistrictBtn").show();
+                        $("#savedistrictBtn").show();
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Unable to add district",
+                            icon: "error",
+                            confirmButtonText: "OK"
+                        });
+                    }
+                })
+            })
+
+            $(document).on("click", ".viewBtn", function() {
+                let id = $(this).data("id");
+                $("#fullPageLoader").show();
+
+
+                $.ajax({
+                    url: "{{ route('view.district') }}",
+                    type: "post",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        'id': id
+                    },
+                    success: function(response) {
+                        $("#savedistrictBtn").hide()
+                        $("#fullPageLoader").hide();
+                        $("#adddistrictModal").modal("show");
+                        $("#district_name").val(response.data.name);
+                        $("#country_id").val(response.data.country_id).trigger("change");
+                        $("#state_id").html('<option>Loading...</option>');
+                        setTimeout(function() {
+                            $("#state_id").val(response.data.state_id).trigger(
+                                "change");
+                        }, 1000);
+                    },
+                    error: function(xhr, status, error) {
+                        $("#fullPageLoader").hide();
+                        if (xhr.status == 403) {
+                            Swal.fire({
+                                title: "Access Denied!",
+                                text: "You don't have district to view this.",
+                                icon: "warning",
+                                confirmButtonText: "OK"
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Error!",
+                                text: "Unable to view district.",
+                                icon: "error",
+                                confirmButtonText: "OK"
+                            });
+                        }
+                    }
+                })
+            });
+
+            $(document).on("click", ".editBtn", function() {
+                let id = $(this).data("id");
+                $("#fullPageLoader").show();
+
+                $.ajax({
+                    url: "{{ route('edit.district') }}",
+                    type: "post",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        id: id
+                    },
+                    success: function(response) {
+                        $("#fullPageLoader").hide();
+                        $("#adddistrictModal").modal("show");
+                        $("#district_name").val(response.data.district);
+                        $("#district_id").val(response.data.id);
+                        $("#savedistrictBtn").show().text("Update");
+                        $("#country_id").val(response.data.country_id).trigger("change");
+                        $("#state_id").html('<option>Loading...</option>');
+                        setTimeout(function() {
+                            $("#state_id").val(response.data.state_id).trigger(
+                                "change");
+                        }, 1000);
+                    },
+                    error: function(xhr) {
+                        $("#fullPageLoader").hide();
+                        if (xhr.status == 403) {
+                            Swal.fire({
+                                title: "Access Denied!",
+                                text: "You don't have permission to edit this district.",
+                                icon: "warning",
+                                confirmButtonText: "OK"
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Error!",
+                                text: "Unable to edit district.",
+                                icon: "error",
+                                confirmButtonText: "OK"
+                            });
+                        }
+                    }
+                });
+            });
+
+
+            $(document).on("click", ".deleteBtn", function() {
+                let id = $(this).data("id");
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Do you really want to delete this district?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "Cancel"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#fullPageLoader").show()
+                        $.ajax({
+                            url: "{{ route('delete.district') }}",
+                            type: "delete",
+                            headers: {
+                                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+                            },
+                            data: {
+                                id: id
+                            },
+                            success: function(response) {
+                                $("#fullPageLoader").hide();
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: "District deleted successfully.",
+                                    icon: "success",
+                                    confirmButtonText: "OK"
+                                });
+                                ajax();
+                            },
+                            error: function(xhr, status, error) {
+                                $("#fullPageLoader").hide();
+                                if (xhr.status == 403) {
+                                    Swal.fire({
+                                        title: "Access Denied!",
+                                        text: "You don't have district to delete this.",
+                                        icon: "warning",
+                                        confirmButtonText: "OK"
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: "Error!",
+                                        text: "Unable to delete district.",
+                                        icon: "error",
+                                        confirmButtonText: "OK"
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
             });
 
         })

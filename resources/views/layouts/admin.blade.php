@@ -171,7 +171,6 @@
             }
         }
 
-        /* Bootstrap 5 compatible Select2 styles */
         .select2-container .select2-selection--single {
             height: calc(2rem + 2px) !important;
             padding: 0.375rem 0.75rem;
