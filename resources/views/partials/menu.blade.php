@@ -30,7 +30,7 @@
 @endcan
 
 
-@can('employee_access')
+@can('employees_access')
     <a class="menu-item d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#employeeSubMenu"
         role="button"
         aria-expanded="{{ Request::is('employees*') || Request::is('inactive-employees*') ? 'true' : 'false' }}">
@@ -38,15 +38,17 @@
         <i class="bi bi-chevron-right arrow-icon"></i>
     </a>
 
-    <div class="collapse {{ Request::is('employees*') || Request::is('inactive-employees*') ? 'show' : '' }}"
+    <div class="collapse {{ Request::is('employees*') || Request::is('employee*') || Request::is('inactive-employees*') ? 'show' : '' }}"
         id="employeeSubMenu">
-
-        <a href="#" class="menu-item ps-5 {{ Request::is('employees*') ? 'active' : '' }}">
-            <i class="bi bi-person-lines-fill"></i> Employees
-        </a>
-
-        <a href="#" class="menu-item ps-5 {{ Request::is('inactive-employees*') ? 'active' : '' }}">
-            <i class="bi bi-person-x-fill"></i> Inactive Employee
+        @can('employee_list_access')
+            <a href="{{ route('employees') }}"
+                class="menu-item ps-5 {{ Request::is('employees*') || Request::is('employee*') ? 'active' : '' }}">
+                <i class="bi bi-person-lines-fill"></i> Employee List
+            </a>
+        @endcan
+        <a href="#" style="font-size: 14px"
+            class="menu-item ps-5 {{ Request::is('inactive-employees*') ? 'active' : '' }}">
+            <i class="bi bi-person-x-fill"></i> Inactive Employee List
         </a>
 
     </div>

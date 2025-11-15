@@ -218,6 +218,28 @@
         .swal2-container {
             z-index: 110000 !important;
         }
+
+        .user-dropdown {
+            background-color: #e6f2ff;
+            border-radius: 30px;
+            color: #006242 !important;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .user-dropdown:hover {
+            background-color: #cfe5ff;
+            color: #006242 !important;
+        }
+
+        .user-dropdown i {
+            color: #006242;
+        }
+
+        .dropdown-menu {
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 
@@ -236,9 +258,10 @@
 
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
-                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person-circle fs-4"></i>
+                    <a class="gap-2 px-3 py-2 nav-link dropdown-toggle d-flex align-items-center user-dropdown"
+                        href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle fs-5"></i>
+                        <span>{{ Auth::user()->name }}</span>
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">

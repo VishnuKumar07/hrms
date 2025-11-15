@@ -2,7 +2,7 @@
 
 <div class="btn-group" style="gap: 6px;">
     @can($viewRoute)
-        <button data-id="{{ $id }}" class="btn btn-success btn-sm viewBtn">View</button>
+        <button data-id="{{ $id }}" class="btn btn-secondary btn-sm viewBtn">View</button>
     @endcan
 
     @can($editRoute)

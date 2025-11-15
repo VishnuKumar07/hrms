@@ -325,6 +325,7 @@
             $(document).on("click", ".editBtn", function() {
                 let id = $(this).data("id");
                 $("#fullPageLoader").show();
+                $("#districtname_error").text("")
 
                 $.ajax({
                     url: "{{ route('edit.district') }}",

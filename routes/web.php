@@ -5,6 +5,7 @@ use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\DistrictController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
@@ -100,6 +101,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/edit-district', [DistrictController::class, 'editDistrict'])->name('edit.district');
     Route::delete('/delete-district', [DistrictController::class, 'deleteDistrict'])->name('delete.district');
     Route::get('/get-states-by-country', [DistrictController::class, 'getStatesByCountry'])->name('get.states.by.country');
+
+    Route::get('/employees', [EmployeeController::class, 'index'])->name('employees');
+    Route::get('/get-employee', [EmployeeController::class, 'getEmployee'])->name('get.employee');
+    Route::post('/employee-changepassword', [EmployeeController::class, 'employeeChangePassword'])->name('employee.changePassword');
+    Route::get('/employee/view/{id}', [EmployeeController::class, 'view'])->name('employee.view');
 
 
 });

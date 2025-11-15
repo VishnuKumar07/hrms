@@ -42,7 +42,7 @@
                         </td>
                         <td>
                             @can('user_edit')
-                                <a href="{{ route('users.edit', encrypt($user->id)) }}" class="btn btn-sm btn-primary">Edit</a>
+                                <a href="{{ route('users.edit', encrypt($user->id)) }}" class="btn btn-sm btn-warning">Edit</a>
                             @endcan
 
                             @can('user_delete')
